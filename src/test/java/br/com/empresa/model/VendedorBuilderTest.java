@@ -10,7 +10,7 @@ public class VendedorBuilderTest {
 
 	@Test
 	public void deveConstruirVendedor() {
-		String registro = "001ç1234567891234çPedçroç50000";
+		String registro = "001ç1234567891234çPedroç50000";
 		Vendedor vendedor = new VendedorBuilder(registro).build();
 		assertEquals("Pedro", vendedor.getNome());
 		assertEquals("1234567891234", vendedor.getCpf());
