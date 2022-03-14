@@ -6,7 +6,7 @@
 
 #### Construir
 ```
-mvn clear package
+mvn clean package
 ```
 
 #### Executar Windows
@@ -18,7 +18,7 @@ java -jar target\leitorArquivos0.0.1-SNAPSHOT.jar
 ```
 java -jar target/leitorArquivos0.0.1-SNAPSHOT.jar
 ```
-### Orientações
+### OrientaÃ§Ãµes
 
 * Criar uma pasta em %HOMEPATH%/data/in
 * Criar uma pasta em %HOMEPATH%/data/out
