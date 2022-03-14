@@ -28,6 +28,14 @@ public class Principal {
 		Path caminhoSaida = Paths.get(System.getProperty("user.home").concat(File.separator).concat("data")
 				.concat(File.separator).concat("out"));
 
+		if (!Files.isDirectory(caminhoEntrada)) {
+			Files.createDirectories(caminhoEntrada);
+		}
+
+		if (!Files.isDirectory(caminhoSaida)) {
+			Files.createDirectories(caminhoSaida);
+		}
+
 		caminhoEntrada.register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
 
 		WatchKey key;
@@ -40,6 +48,7 @@ public class Principal {
 				if (".dat".equalsIgnoreCase(nomeArquivo.substring(nomeArquivo.length() - 4))) {
 
 					Path caminhoArquivoEntrada = caminhoEntrada.resolve((Path) event.context());
+
 					Path carminhoArquivoSaida = caminhoSaida.resolve(nomeArquivo.replace(".dat", ".done.dat"));
 					List<String> linhas = Files.readAllLines(caminhoArquivoEntrada);
 					service.processarRegistros(linhas);

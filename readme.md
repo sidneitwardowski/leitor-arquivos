@@ -20,9 +20,7 @@ java -jar target/leitorArquivos0.0.1-SNAPSHOT.jar
 ```
 ### Orientações
 
-* Criar uma pasta em %HOMEPATH%/data/in
-* Criar uma pasta em %HOMEPATH%/data/out
-* Inserir o [Arquivo de modelo](modelo/modelo.dat) na pasta in.
+* Executar a aplicação e em seguida inserir o [Arquivo de modelo](modelo/modelo.dat) na pasta %HOMEPATH%/data/in.
 
 
 
