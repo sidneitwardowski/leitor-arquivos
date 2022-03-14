@@ -7,6 +7,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
@@ -28,6 +29,9 @@ public class Principal {
 		Path caminhoSaida = Paths.get(System.getProperty("user.home").concat(File.separator).concat("data")
 				.concat(File.separator).concat("out"));
 
+		Path caminhoInconsistencias = Paths.get(System.getProperty("user.home").concat(File.separator).concat("data")
+				.concat(File.separator).concat("erro"));
+
 		if (!Files.isDirectory(caminhoEntrada)) {
 			Files.createDirectories(caminhoEntrada);
 		}
@@ -39,23 +43,39 @@ public class Principal {
 		caminhoEntrada.register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
 
 		WatchKey key;
+		BufferedWriter writer;
 
 		while ((key = watchService.take()) != null) {
 			for (WatchEvent<?> event : key.pollEvents()) {
 
 				String nomeArquivo = event.context().toString();
+				Path caminhoArquivoEntrada = caminhoEntrada.resolve((Path) event.context());
 
 				if (".dat".equalsIgnoreCase(nomeArquivo.substring(nomeArquivo.length() - 4))) {
 
-					Path caminhoArquivoEntrada = caminhoEntrada.resolve((Path) event.context());
+					try {
 
-					Path carminhoArquivoSaida = caminhoSaida.resolve(nomeArquivo.replace(".dat", ".done.dat"));
-					List<String> linhas = Files.readAllLines(caminhoArquivoEntrada);
-					service.processarRegistros(linhas);
-					// System.out.println(service.obterResultadoFormatado());
-					try (BufferedWriter writer = Files.newBufferedWriter(carminhoArquivoSaida)) {
+						Path carminhoArquivoSaida = caminhoSaida.resolve(nomeArquivo.replace(".dat", ".done.dat"));
+						List<String> linhas = Files.readAllLines(caminhoArquivoEntrada);
+
+						service.processarRegistros(linhas);
+						writer = Files.newBufferedWriter(carminhoArquivoSaida);
 						writer.write(service.obterResultadoFormatado());
+						writer.close();
 
+					} catch (Exception e) {
+						if (!Files.isDirectory(caminhoInconsistencias)) {
+							Files.createDirectories(caminhoInconsistencias);
+						}
+
+						Files.move(caminhoArquivoEntrada, caminhoInconsistencias.resolve(nomeArquivo),
+								StandardCopyOption.REPLACE_EXISTING);
+
+						Path carminhoErro = caminhoInconsistencias
+								.resolve(nomeArquivo.replace(".dat", "motivo-erro.dat"));
+						writer = Files.newBufferedWriter(carminhoErro);
+						writer.write(e.getMessage());
+						writer.close();
 					}
 
 				}
