@@ -1,0 +1,20 @@
+package br.com.empresa.model;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.math.BigDecimal;
+
+import org.junit.jupiter.api.Test;
+
+class VendedorBuilderTest {
+
+	@Test
+	void deveConstruirVendedor() {
+		String registro = "001ç1234567891234çPedroç50000";
+		Vendedor vendedor = new VendedorBuilder(registro).build();
+		assertEquals("Pedro", vendedor.getNome());
+		assertEquals("1234567891234", vendedor.getCpf());
+		assertEquals(new BigDecimal("50000"), vendedor.getSalario());
+	}
+
+}
