@@ -11,7 +11,7 @@ mvn clean package
 
 #### Executar Windows
 ```
-java -jar target/leitorArquivos-0.0.1-SNAPSHOT.jar
+java -jar target\leitorArquivos-0.0.1-SNAPSHOT.jar
 ```
 
 #### Executar Unix
